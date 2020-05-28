@@ -2,12 +2,15 @@ package com.ls.zy.wordreader.task;
 
 import com.ls.zy.wordreader.config.GlobalConfig;
 import com.ls.zy.wordreader.entity.BuildAnalysisTemplate;
+import com.ls.zy.wordreader.entity.echarts.Option;
 import com.ls.zy.wordreader.handlers.BuildTemplateWordHandler;
 import com.ls.zy.wordreader.handlers.SimulateDateHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+
+import static com.ls.zy.wordreader.handlers.EchartGenerator.generatePowerFactorTrend;
 
 /**
  * 定时读取某路径下的doc文件模板并解析
@@ -29,6 +32,9 @@ public class ReaderDocTask {
         //模拟数据，实际场景需要替换此处
         BuildAnalysisTemplate buildAnalysisTemplate = SimulateDateHandler.inintBuildAnalysisTemplate();
         BuildTemplateWordHandler.generateNewWord(buildAnalysisTemplate);
+
+//        Option powerFactorTrendOption = SimulateDateHandler.initPowerFactorTrendOption();
+//        generatePowerFactorTrend(powerFactorTrendOption,"C:\\Users\\zhangyang\\Desktop\\temp");
 
     }
 

@@ -20,11 +20,17 @@ import java.util.UUID;
  */
 public class EchartsUtil {
 
-//    private static final String ECHARTS_CONVERT_PATH = EchartsUtil.class.getClassLoader().getResource("").getPath() + "static/js/echarts-convert.js";
-    private static final String EC_STATIC_DIR = "static/js";
-    private static final String EC_NAME = "echarts-convert.js";
     private static final String SYSTEM_ENV = PropertiesUtil.readProperties().getSystemEnv();
     private static final String PHANTOMJS_PATH =PropertiesUtil.readProperties().getPhantomjsPath();
+    private static final String TEMP_DIR =PropertiesUtil.readProperties().getTempDir();
+    private static final Map<String,String> staticFileMap = new HashMap<>();
+
+    static {
+        staticFileMap.put("static/js/echarts-convert.js",TEMP_DIR+File.separator+"echarts-convert.js");
+        staticFileMap.put("static/js/echarts-all.js",TEMP_DIR+File.separator+"echarts-all.js");
+        staticFileMap.put("static/js/jquery-1.9.1.min.js",TEMP_DIR+File.separator+"jquery-1.9.1.min.js");
+    }
+
 
     static Logger logger = LoggerFactory.getLogger(EchartsUtil.class);
 
@@ -270,7 +276,7 @@ public class EchartsUtil {
         String dataPath = writeFile(option, outputDir);
         String fileName= "echarts-"+ UUID.randomUUID().toString().substring(0, 8) + ".png";
         String path = outputDir+ File.separator +fileName;
-        logger.info("Will build cChartsPicture ：{}"+ path);
+        logger.info("Will build cChartsPicture ：{}", path);
         try {
             File file = new File(path);     //文件路径（路径+文件名）
             if (!file.exists()) {   //文件不存在则创建文件，先创建目录
@@ -280,25 +286,18 @@ public class EchartsUtil {
             }
 
             //打包采用静态方法,没有合适解决方式，本地Temp中新建，后删除
-            String tempPath = PropertiesUtil.readProperties().getTempDir();
-            String localTempFilePath = tempPath+File.separator+EC_NAME;
-            File localFile = new File(localTempFilePath);
-            if(!localFile.exists()){
-                localFile.createNewFile();
-            }
-            ClassPathResource resource = new ClassPathResource(EC_STATIC_DIR+File.separator+EC_NAME);
-            InputStream ips = resource.getInputStream();
-            FileUtil.writeToLocal(ips,localTempFilePath);
+            saveToLocal();
 
             //处理不同系统环境下echartsConvertJs路径及cmd命令
 //            String echartsConvertPath = ECHARTS_CONVERT_PATH;
 //            if(SystemEnv.WINDOWS.getType().equals(SYSTEM_ENV)){
+
 //                echartsConvertPath = echartsConvertPath.substring(1);
 //            }
 
 
-            String cmd = PHANTOMJS_PATH + " " + localTempFilePath + " -infile " + dataPath + " -outfile " + path;
-            logger.info("cmd: {}", cmd);
+            String cmd = PHANTOMJS_PATH + " " + getEchartsConvertJs() + " -infile " + dataPath + " -outfile " + path;
+            logger.info("Will execute cmd: {}", cmd);
             Process process = Runtime.getRuntime().exec(cmd);
             BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line = "";
@@ -307,8 +306,8 @@ public class EchartsUtil {
             }
             input.close();
             process.destroy();
-            FileUtil.deleteFile(dataPath);
-            FileUtil.deleteFile(localTempFilePath);
+            FileUtil.deleteAllSafely(dataPath);
+            deleteTempFile();
         } catch (IOException e) {
             e.printStackTrace();
         }finally{
@@ -332,7 +331,7 @@ public class EchartsUtil {
                 dir.mkdirs();
                 writename.createNewFile(); // 创建新文件
             }
-            BufferedWriter out = new BufferedWriter(new FileWriter(writename));
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(dataPath)),"utf-8"));
             out.write(options); // \r\n即为换行
             out.flush(); // 把缓存区内容压入文件
             out.close(); // 最后记得关闭文件
@@ -340,6 +339,37 @@ public class EchartsUtil {
             e.printStackTrace();
         }
         return dataPath;
+    }
+
+
+    /**
+     * 把需要的静态文件转换到本地路径
+     */
+    public static void saveToLocal() throws IOException{
+        for(String key:staticFileMap.keySet()){
+            FileUtil.writeSourceToLocal(key,staticFileMap.get(key));
+        }
+    }
+
+    /**
+     * 把需要的静态文件转换到本地路径
+     */
+    public static void deleteTempFile(){
+        for(String key:staticFileMap.keySet()){
+            FileUtil.deleteAllSafely(staticFileMap.get(key));
+        }
+    }
+
+    /**
+     * 把需要的静态文件转换到本地路径
+     */
+    public static String getEchartsConvertJs(){
+        for(String key:staticFileMap.keySet()){
+            if(key.contains("echarts-convert")){
+                return staticFileMap.get(key);
+            }
+        }
+        return null;
     }
 
 }

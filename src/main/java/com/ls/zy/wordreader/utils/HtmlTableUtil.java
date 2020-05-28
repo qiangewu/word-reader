@@ -30,7 +30,7 @@ public class HtmlTableUtil {
             ImageRenderer imageRenderer = new ImageRendererImpl(htmlParser);
             String fileName= "table-"+ UUID.randomUUID().toString().substring(0, 8) + ".png";
             path = outputDir+ File.separator+fileName;
-            logger.info("Will build table ：{}"+ path);
+            logger.info("Will build table ：{}", path);
             imageRenderer.saveImage(path);
 //            Thread.sleep(2000l);
 //        } catch (InterruptedException e) {

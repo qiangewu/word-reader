@@ -3,6 +3,7 @@ package com.ls.zy.wordreader.utils;
 import com.ls.zy.wordreader.enums.FileType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StringUtils;
 
 import java.io.*;
@@ -115,6 +116,12 @@ public class FileUtil {
      */
     public static void writeToLocal(InputStream input,String destination)
             throws IOException {
+        File localFile = new File(destination);
+        if(!localFile.exists()){
+            File dir = new File(localFile.getParent());
+            dir.mkdirs();
+            localFile.createNewFile();
+        }
         int index;
         byte[] bytes = new byte[1024];
         FileOutputStream downloadFile = new FileOutputStream(destination);
@@ -124,6 +131,19 @@ public class FileUtil {
         }
         input.close();
         downloadFile.close();
+    }
+
+    /**
+     * 把resources中的文件写入本地
+     * @param sourceFile sources中文件地址
+     * @param destination 目标文件地址
+     * @throws IOException
+     */
+    public static void writeSourceToLocal(String sourceFile,String destination)
+            throws IOException {
+        ClassPathResource resource = new ClassPathResource(sourceFile);
+        InputStream ips = resource.getInputStream();
+        writeToLocal( ips, destination);
     }
 
 }

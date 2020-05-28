@@ -40,10 +40,7 @@ public class FreemarkerUtil {
         //打包采用静态方法,没有合适解决方式，本地Temp中新建，后删除
         String tempPath = PropertiesUtil.readProperties().getTempDir();
         String localTempFilePath = tempPath+File.separator+templateFileName;
-        File localFile = new File(localTempFilePath);
-        if(!localFile.exists()){
-            localFile.createNewFile();
-        }
+
 //        InputStream ips = FreemarkerUtil.class.getClassLoader().getResourceAsStream(templateDirectory+File.separator+templateFileName);
 //        InputStream ips = new FileInputStream(ResourceUtils.getFile("classpath:"+templateDirectory+File.separator+templateFileName));
         ClassPathResource resource = new ClassPathResource(templateDirectory+File.separator+templateFileName);
