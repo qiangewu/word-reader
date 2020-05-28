@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<div>
+    <table style="margin-left:0;font-weight: bold;text-align: center;border-top: 2px solid black;border-left: 2px solid black;" cellspacing="0">
+        <tr>
+            <td width = "110px" height="55px" style="padding-left: 1%;cellpadding: 0px;cellspacing: 0px;border-bottom: 2px solid black;border-right: 2px solid black;">
+                <span><b>*</b>设备名称</span>
+            </td>
+            <td width = "80px" height="55px" style="padding-left: 1%;cellpadding: 0px;cellspacing: 0px;border-bottom: 2px solid black;border-right: 2px solid black;">
+                <span><b>*</b>设备<br/>数量</span>
+            </td>
+            <td width = "80px" height="55px" style="padding-left: 1%;cellpadding: 0px;cellspacing: 0px;border-bottom: 2px solid black;border-right: 2px solid black;">
+                <span><b>*</b>用能<br/>类型</span>
+            </td>
+            <td  width = "110px" height="55px" style="padding-left: 1%;cellpadding: 0px;cellspacing: 0px;border-bottom: 2px solid black;border-right: 2px solid black;">
+                <span>预计年均<br/>耗能量</span>
+            </td>
+            <td width = "90px" height="55px" style="padding-left: 1%;cellpadding: 0px;cellspacing: 0px;border-bottom: 2px solid black;border-right: 2px solid black;">
+                <span>总用电<br/>容量</span>
+            </td>
+            <td width = "155px" height="55px" style="padding-left: 1%;cellpadding: 0px;cellspacing: 0px;border-bottom: 2px solid black;border-right: 2px solid black;">
+                <span>用电负荷等级</span>
+            </td>
+            <td width = "240px" height="55px" style="padding-left: 1%;cellpadding: 0px;cellspacing: 0px;border-bottom: 2px solid black;border-right: 2px solid black;">
+                <span>生产性质</span>
+            </td>
+            <td width = "80px" height="55px" style="padding-left: 1%;cellpadding: 0px;cellspacing: 0px;border-bottom: 2px solid black;border-right: 2px solid black;">
+                <span><b>*</b>更换<br/>意向</span>
+            </td>
+        </tr>
+        <#if energyUsagaList??>
+            <#list energyUsagaList as item>
+            <tr>
+                <td height="60px" style="padding-left: 1%;cellpadding: 0px;cellspacing: 0px;border-bottom: 2px solid black;border-right: 2px solid black;">
+                    ${item.deviceName}
+                </td>
+                <td height="60px" style="padding-left: 1%;cellpadding: 0px;cellspacing: 0px;border-bottom: 2px solid black;border-right: 2px solid black;">
+                    ${item.deviceNum}
+                </td>
+                <td height="60px" style="padding-left: 1%;cellpadding: 0px;cellspacing: 0px;border-bottom: 2px solid black;border-right: 2px solid black;">
+                    ${item.energyType}
+                </td>
+                <td height="60px" style="padding-left: 1%;cellpadding: 0px;cellspacing: 0px;border-bottom: 2px solid black;border-right: 2px solid black;">
+                    ${item.expectedCapacity}
+                </td>
+                <td height="60px" style="padding-left: 1%;cellpadding: 0px;cellspacing: 0px;border-bottom: 2px solid black;border-right: 2px solid black;">
+                    ${item.totalCapacity}
+                </td>
+                <td height="60px" style="padding-left: 1%;cellpadding: 0px;cellspacing: 0px;border-bottom: 2px solid black;border-right: 2px solid black;">
+                    <label><input style="margin-top: -5px" name="loadLevel" type="checkbox" value="1" <#if  item.loadLevel?? && item.loadLevel==1>checked="checked"</#if>/>一级 </label>
+                    <label><input style="margin-top: -5px" name="loadLevel" type="checkbox" value="2" <#if  item.loadLevel?? && item.loadLevel==2>checked="checked"</#if>/>二级 </label>
+                    <br/>
+                    <label><input style="margin-top: -5px" name="loadLevel" type="checkbox" value="3" <#if  item.loadLevel?? && item.loadLevel==3>checked="checked"</#if>/>三级 </label>
+                </td>
+                <td height="60px" style="padding-left: 1%;cellpadding: 0px;cellspacing: 0px;border-bottom: 2px solid black;border-right: 2px solid black;">
+                    <label><input style="margin-top: -5px" name="productionType" type="checkbox" value="1" <#if  item.productionType?? && item.productionType==1>checked="checked"</#if>/>安全保障 </label>
+                    <label><input style="margin-top: -5px" name="productionType" type="checkbox" value="2" <#if  item.productionType?? && item.productionType==2>checked="checked"</#if>/>主要生产 </label>
+                    <br/>
+                    <label><input style="margin-top: -5px;margin-left: -5px" name="productionType" type="checkbox" value="3" <#if  item.productionType?? && item.productionType==3>checked="checked"</#if>/>辅助生产 </label>
+                    <label><input style="margin-top: -5px;margin-left: 0px" name="productionType" type="checkbox" value="4" <#if  item.productionType?? && item.productionType==4>checked="checked"</#if>/>非生产性 </label>
+                </td>
+                <td height="60px" style="padding-left: 1%;cellpadding: 0px;cellspacing: 0px;border-bottom: 2px solid black;border-right: 2px solid black;">
+                    <label><input style="margin-top: -5px" name="replacementIntention" type="checkbox" value="1" <#if  item.replacementIntention?? && item.replacementIntention==1>checked="checked"</#if>/>有 </label>
+                    <br />
+                    <label><input style="margin-top: -5px;margin-left: -4px" name="replacementIntention" type="checkbox" value="2" <#if  item.replacementIntention?? && item.replacementIntention==2>checked="checked"</#if>/>无 </label>
+                </td>
+            </tr>
+            </#list>
+        </#if>
+    </table>
+</div>
+</html>

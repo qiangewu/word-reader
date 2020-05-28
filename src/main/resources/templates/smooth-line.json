@@ -1,0 +1,37 @@
+{
+  <#if colors??>
+  color: [${colors}],
+  </#if>
+  legend: {
+    data: [
+      <#if items??>
+      <#list items as item>
+      {
+        name: '${item}',
+        icon: 'rect',
+      },
+      </#list>
+      </#if>
+    ],
+  },
+  xAxis: {
+    type: 'category',
+    data: [${xRanges}]
+  },
+  yAxis: {
+    type: 'value',
+    "name": '${unit}'
+  },
+  series: [
+    <#if seriesMap??>
+    <#list seriesMap?keys as key>
+    {
+      name: '${key}',
+      data: [${seriesMap["${key}"]}],
+      type: 'line',
+      smooth: true
+    },
+    </#list>
+    </#if>
+  ]
+}

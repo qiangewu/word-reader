@@ -1,0 +1,76 @@
+{
+//  "color": ['#ff9900', '#00cc66', '#1495eb'],
+  <#if colors??>
+  color: [${colors}],
+  </#if>
+  "tooltip": {
+    "trigger": 'axis',
+    "axisPointer": {
+      "type": 'shadow'
+    }
+  },
+  "legend": {
+    data: [
+      <#if items??>
+      <#list items as item>
+      {
+        name: '${item}'
+      },
+      </#list>
+      </#if>
+    ]
+  },
+  "toolbox": {
+    "show": false,
+    "orient": 'vertical',
+    "left": 'right',
+    "top": 'center',
+    "feature": {
+      "mark": {"show": true},
+      "dataView": {"show": true, "readOnly": false},
+      "magicType": {"show": true, "type": ['line', 'bar', 'stack', 'tiled']},
+      "restore": {"show": true},
+      "saveAsImage": {"show": true}
+    }
+  },
+  "xAxis": [
+    {
+      "type": 'category',
+      "axisTick": {"show": true},
+      "data": [${xRanges}],
+    }
+  ],
+  "yAxis": [
+    {
+      "type": 'value',
+      "name": '${unit}'
+    }
+  ],
+  "series": [
+    <#if seriesMap??>
+    <#list seriesMap?keys as key>
+    {
+      "name": '${key}',
+      "type": 'bar',
+      "barGap": 0,
+//      "label": {
+//        "show": true,
+//        "position":'insideBottom',
+//        "distance": 15,
+//        "align": 'left',
+//        "verticalAlign": 'middle',
+//        "formatter": '{c}  {name|{a}}',
+//        "fontSize": 16,
+//        "rotate": 90,
+//        "rich": {
+//          "name": {
+//            "textBorderColor": '#fff'
+//          }
+//        }
+//      },
+      "data": [${seriesMap["${key}"]}],
+    },
+    </#list>
+    </#if>
+  ]
+}
