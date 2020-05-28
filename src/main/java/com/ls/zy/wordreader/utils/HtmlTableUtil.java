@@ -24,12 +24,13 @@ public class HtmlTableUtil {
         String path = null;
         try {
             String imageHtml = null;
-            imageHtml = FreemarkerUtil.generateString("energy-usaga.html", "/templates", datas);
+            imageHtml = FreemarkerUtil.generateString("energy-usaga.html", "templates", datas);
             HtmlParser htmlParser = new HtmlParserImpl();
             htmlParser.loadHtml(imageHtml);
             ImageRenderer imageRenderer = new ImageRendererImpl(htmlParser);
             String fileName= "table-"+ UUID.randomUUID().toString().substring(0, 8) + ".png";
             path = outputDir+ File.separator+fileName;
+            logger.info("Will build table ：{}"+ path);
             imageRenderer.saveImage(path);
 //            Thread.sleep(2000l);
 //        } catch (InterruptedException e) {

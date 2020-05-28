@@ -3,15 +3,19 @@ package com.ls.zy.wordreader.utils;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.Map;
 
 public class FreemarkerUtil {
 
-    private static final String RESOURCES_PATH = FreemarkerUtil.class.getClassLoader().getResource("").getPath();
+    static Logger logger = LoggerFactory.getLogger(FreemarkerUtil.class);
+
+//    private static final String RESOURCES_PATH = FreemarkerUtil.class.getClassLoader().getResource("").getPath();
 
     /**
      * 将datas信息写入模板并返回
@@ -30,7 +34,24 @@ public class FreemarkerUtil {
         configuration.setDefaultEncoding("UTF-8");
 
         // 设置模板所在文件夹
-        configuration.setDirectoryForTemplateLoading(new File(RESOURCES_PATH + templateDirectory));
+        //未打包使用
+//        configuration.setDirectoryForTemplateLoading(ResourceUtils.getFile("classpath:"+  templateDirectory));
+
+        //打包采用静态方法,没有合适解决方式，本地Temp中新建，后删除
+        String tempPath = PropertiesUtil.readProperties().getTempDir();
+        String localTempFilePath = tempPath+File.separator+templateFileName;
+        File localFile = new File(localTempFilePath);
+        if(!localFile.exists()){
+            localFile.createNewFile();
+        }
+//        InputStream ips = FreemarkerUtil.class.getClassLoader().getResourceAsStream(templateDirectory+File.separator+templateFileName);
+//        InputStream ips = new FileInputStream(ResourceUtils.getFile("classpath:"+templateDirectory+File.separator+templateFileName));
+        ClassPathResource resource = new ClassPathResource(templateDirectory+File.separator+templateFileName);
+        InputStream ips = resource.getInputStream();
+        FileUtil.writeToLocal(ips,localTempFilePath);
+
+        // 设置模板所在文件夹
+        configuration.setDirectoryForTemplateLoading(new File(tempPath));
 
         // 生成模板对象
         Template template = configuration.getTemplate(templateFileName);
@@ -39,6 +60,11 @@ public class FreemarkerUtil {
         try (StringWriter stringWriter = new StringWriter()) {
             template.process(datas, stringWriter);
             stringWriter.flush();
+            try {
+                FileUtil.deleteAllSafely(localTempFilePath);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return stringWriter.getBuffer().toString();
         }
     }

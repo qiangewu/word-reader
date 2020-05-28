@@ -32,7 +32,7 @@ public class BuildTemplateWordHandler {
             FileInputStream fis = new FileInputStream(globalConfig.getTemplateDir());
             FileOutputStream fos = new FileOutputStream(globalConfig.getTemplateResultDir());
             ZipSecureFile.setMinInflateRatio(-1.0d);
-            String tempOutputDir = PropertiesUtil.readProperties().getTempPath()+ File.separator+UUID.randomUUID().toString().substring(0, 8);
+            String tempOutputDir = PropertiesUtil.readProperties().getTempDir()+ File.separator+UUID.randomUUID().toString().substring(0, 8);
             //生成对应图片
             BuildTemplateWordHandler.generatePicture(buildAnalysisTemplate,tempOutputDir);
             //转化Word识别的Map

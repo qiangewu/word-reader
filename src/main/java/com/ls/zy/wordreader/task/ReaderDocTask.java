@@ -25,9 +25,11 @@ public class ReaderDocTask {
     @PostConstruct
 //    @Scheduled(cron = "0 0/2 * * * ?")
     public void readerExcel(){
+
         //模拟数据，实际场景需要替换此处
         BuildAnalysisTemplate buildAnalysisTemplate = SimulateDateHandler.inintBuildAnalysisTemplate();
         BuildTemplateWordHandler.generateNewWord(buildAnalysisTemplate);
+
     }
 
 

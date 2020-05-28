@@ -14,7 +14,7 @@ public class GlobalConfig {
      * 生成临时文件及图片存放路径
      */
     @Value("${tempDir}")
-    String tempPath;
+    String tempDir;
 
     /**
      * 楼宇潜力客户用能初步分析报告模板路径

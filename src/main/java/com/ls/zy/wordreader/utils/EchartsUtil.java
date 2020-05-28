@@ -7,6 +7,7 @@ import com.ls.zy.wordreader.enums.SystemEnv;
 import freemarker.template.TemplateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.*;
 import java.util.HashMap;
@@ -19,10 +20,11 @@ import java.util.UUID;
  */
 public class EchartsUtil {
 
-    private static final String ECHARTS_CONVERT_PATH = EchartsUtil.class.getClassLoader().getResource("").getPath() + "static/js/echarts-convert.js";
+//    private static final String ECHARTS_CONVERT_PATH = EchartsUtil.class.getClassLoader().getResource("").getPath() + "static/js/echarts-convert.js";
+    private static final String EC_STATIC_DIR = "static/js";
+    private static final String EC_NAME = "echarts-convert.js";
     private static final String SYSTEM_ENV = PropertiesUtil.readProperties().getSystemEnv();
     private static final String PHANTOMJS_PATH =PropertiesUtil.readProperties().getPhantomjsPath();
-//    private static final String TEMP_DIR =PropertiesUtil.readProperties().getTempPath();
 
     static Logger logger = LoggerFactory.getLogger(EchartsUtil.class);
 
@@ -83,7 +85,7 @@ public class EchartsUtil {
         HashMap<String, Object> resultMap = generateResultMap(items,colors,xRanges,datas,unit);
         String option = null;
         try {
-            option = FreemarkerUtil.generateString("histogram.json", "/templates", resultMap);
+            option = FreemarkerUtil.generateString("histogram.json", "templates", resultMap);
         } catch (IOException e) {
             logger.error(e.toString());
         } catch (TemplateException e) {
@@ -102,7 +104,7 @@ public class EchartsUtil {
         HashMap<String, Object> resultMap = generateResultMap(option);
         String optionJson = null;
         try {
-            optionJson = FreemarkerUtil.generateString("histogram.json", "/templates", resultMap);
+            optionJson = FreemarkerUtil.generateString("histogram.json", "templates", resultMap);
         } catch (IOException e) {
             logger.error(e.toString());
         } catch (TemplateException e) {
@@ -127,7 +129,7 @@ public class EchartsUtil {
         HashMap<String, Object> resultMap = generateResultMap(items,colors,xRanges,datas,unit);
         String option = null;
         try {
-            option = FreemarkerUtil.generateString("smooth-line.json", "/templates", resultMap);
+            option = FreemarkerUtil.generateString("smooth-line.json", "templates", resultMap);
         } catch (IOException e) {
             logger.error(e.toString());
         } catch (TemplateException e) {
@@ -147,7 +149,7 @@ public class EchartsUtil {
         HashMap<String, Object> resultMap = generateResultMap(option);
         String optionJson = null;
         try {
-            optionJson = FreemarkerUtil.generateString("smooth-line.json", "/templates", resultMap);
+            optionJson = FreemarkerUtil.generateString("smooth-line.json", "templates", resultMap);
         } catch (IOException e) {
             logger.error(e.toString());
         } catch (TemplateException e) {
@@ -268,6 +270,7 @@ public class EchartsUtil {
         String dataPath = writeFile(option, outputDir);
         String fileName= "echarts-"+ UUID.randomUUID().toString().substring(0, 8) + ".png";
         String path = outputDir+ File.separator +fileName;
+        logger.info("Will build cChartsPicture ：{}"+ path);
         try {
             File file = new File(path);     //文件路径（路径+文件名）
             if (!file.exists()) {   //文件不存在则创建文件，先创建目录
@@ -275,12 +278,27 @@ public class EchartsUtil {
                 dir.mkdirs();
                 file.createNewFile();
             }
-            //处理不同系统环境下echartsConvertJs路径及cmd命令
-            String echartsConvertPath = ECHARTS_CONVERT_PATH;
-            if(SystemEnv.WINDOWS.getType().equals(SYSTEM_ENV)){
-                echartsConvertPath = echartsConvertPath.substring(1);
+
+            //打包采用静态方法,没有合适解决方式，本地Temp中新建，后删除
+            String tempPath = PropertiesUtil.readProperties().getTempDir();
+            String localTempFilePath = tempPath+File.separator+EC_NAME;
+            File localFile = new File(localTempFilePath);
+            if(!localFile.exists()){
+                localFile.createNewFile();
             }
-            String cmd = PHANTOMJS_PATH + " " + echartsConvertPath + " -infile " + dataPath + " -outfile " + path;
+            ClassPathResource resource = new ClassPathResource(EC_STATIC_DIR+File.separator+EC_NAME);
+            InputStream ips = resource.getInputStream();
+            FileUtil.writeToLocal(ips,localTempFilePath);
+
+            //处理不同系统环境下echartsConvertJs路径及cmd命令
+//            String echartsConvertPath = ECHARTS_CONVERT_PATH;
+//            if(SystemEnv.WINDOWS.getType().equals(SYSTEM_ENV)){
+//                echartsConvertPath = echartsConvertPath.substring(1);
+//            }
+
+
+            String cmd = PHANTOMJS_PATH + " " + localTempFilePath + " -infile " + dataPath + " -outfile " + path;
+            logger.info("cmd: {}", cmd);
             Process process = Runtime.getRuntime().exec(cmd);
             BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line = "";
@@ -290,6 +308,7 @@ public class EchartsUtil {
             input.close();
             process.destroy();
             FileUtil.deleteFile(dataPath);
+            FileUtil.deleteFile(localTempFilePath);
         } catch (IOException e) {
             e.printStackTrace();
         }finally{

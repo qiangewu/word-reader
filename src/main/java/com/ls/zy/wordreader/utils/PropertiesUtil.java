@@ -18,7 +18,7 @@ public class PropertiesUtil {
             p.load(PropertiesUtil.class.getResourceAsStream("/global.properties"));
             for (Object key : p.keySet()) {
                 if(key.toString().equals("tempDir")) {
-                    globalConfig.setTempPath(p.get(key).toString());
+                    globalConfig.setTempDir(p.get(key).toString());
                     continue;
                 }
                 if(key.toString().equals("templateDir")) {

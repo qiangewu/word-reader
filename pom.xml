@@ -127,7 +127,38 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>cn.joylau.code</groupId>
+                <artifactId>joylau-springboot-daemon-windows</artifactId>
+                <version>1.0.RELEASE</version>
+                <executions>
+                    <execution>
+                        <id>make-win-service</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>make-win-service</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.yml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
-
 </project>

@@ -5,7 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import java.io.File;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.nio.file.FileSystems;
 
 public class FileUtil {
     static Logger logger = LoggerFactory.getLogger(FileUtil.class);
@@ -64,7 +66,7 @@ public class FileUtil {
         File file = new File(fileName);/*根据指定的文件名创建File对象*/
         if (file.exists() && file.isFile()) { /*要删除的文件存在且是文件*/
             if (file.delete()) {
-               logger.info("文件" + fileName + "删除成功！");
+//               logger.info("文件" + fileName + "删除成功！");
                 return true;
             } else {
                 logger.error("文件" + fileName + "删除失败！");
@@ -100,8 +102,28 @@ public class FileUtil {
         }
         if (file.delete()){
             /*删除当前目录*/
-            logger.info("目录" + dirName + "删除成功！");
+//            logger.info("目录" + dirName + "删除成功！");
         }
         return true;
     }
+
+    /**
+     * 把文件流写入本地
+     * @param input
+     * @param destination 目标文件地址
+     * @throws IOException
+     */
+    public static void writeToLocal(InputStream input,String destination)
+            throws IOException {
+        int index;
+        byte[] bytes = new byte[1024];
+        FileOutputStream downloadFile = new FileOutputStream(destination);
+        while ((index = input.read(bytes)) != -1) {
+            downloadFile.write(bytes, 0, index);
+            downloadFile.flush();
+        }
+        input.close();
+        downloadFile.close();
+    }
+
 }
