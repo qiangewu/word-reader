@@ -264,6 +264,7 @@ public class EchartsUtil {
      * @return
      */
     static String toEChartsPicture(String option,String outputDir) {
+        //.JSON文件路径，用于读取生成echarts图片
         String dataPath = writeFile(option, outputDir);
         String fileName= "echarts-"+ UUID.randomUUID().toString().substring(0, 8) + ".png";
         String path = outputDir+ File.separator +fileName;
@@ -288,6 +289,7 @@ public class EchartsUtil {
             }
             input.close();
             process.destroy();
+            FileUtil.deleteFile(dataPath);
         } catch (IOException e) {
             e.printStackTrace();
         }finally{

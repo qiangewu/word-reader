@@ -49,5 +49,10 @@ public class EchartGenerator {
         return path;
     }
 
+//    public static void main(String[] args) {
+//        Option powerFactorTrendOption = SimulateDateHandler.initPowerFactorTrendOption();
+//        generatePowerFactorTrend(powerFactorTrendOption,"C:\\Users\\zhangyang\\Desktop\\temp");
+//    }
+
 
 }
