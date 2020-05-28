@@ -16,10 +16,10 @@ public class EchartGenerator {
     /**
      * 生成 柱状图 峰谷平电量（按月）趋势图
      */
-    public static String generateElectricityTrend(Option electricityTrendOption){
+    public static String generateElectricityTrend(Option electricityTrendOption,String outputDir){
         String path = null;
         if(electricityTrendOption!=null){
-            path = EchartsUtil.generateEchartsPicture(electricityTrendOption, EchartsType.HISTOGRAM);
+            path = EchartsUtil.generateEchartsPicture(electricityTrendOption, EchartsType.HISTOGRAM, outputDir);
         }
         return path;
     }
@@ -28,10 +28,10 @@ public class EchartGenerator {
     /**
      * 生成 平滑曲线图 月均负荷曲线图
      */
-    public static String generateLoadLineOption(Option loadLineOption){
+    public static String generateLoadLineOption(Option loadLineOption,String outputDir){
         String path = null;
         if(loadLineOption!=null){
-            path = EchartsUtil.generateEchartsPicture(loadLineOption, EchartsType.SMOOTH_LINE);
+            path = EchartsUtil.generateEchartsPicture(loadLineOption, EchartsType.SMOOTH_LINE, outputDir);
         }
         return path;
     }
@@ -41,10 +41,10 @@ public class EchartGenerator {
     /**
      * 生成 平滑曲线图 总体功率因数趋势图
      */
-    public static String generatePowerFactorTrend(Option powerFactorTrendOption){
+    public static String generatePowerFactorTrend(Option powerFactorTrendOption,String outputDir){
         String path = null;
         if(powerFactorTrendOption!=null){
-            path = EchartsUtil.generateEchartsPicture(powerFactorTrendOption, EchartsType.SMOOTH_LINE);
+            path = EchartsUtil.generateEchartsPicture(powerFactorTrendOption, EchartsType.SMOOTH_LINE, outputDir);
         }
         return path;
     }

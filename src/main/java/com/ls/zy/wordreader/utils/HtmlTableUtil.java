@@ -8,8 +8,10 @@ import gui.ava.html.renderer.ImageRendererImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 处理HTML静态页面生成Table对应的图片
@@ -18,7 +20,7 @@ public class HtmlTableUtil {
 
     static Logger logger = LoggerFactory.getLogger(HtmlTableUtil.class);
 
-    public static String generateTablePicture(Map<String,Object> datas) {
+    public static String generateTablePicture(Map<String,Object> datas,String outputDir) {
         String path = null;
         try {
             String imageHtml = null;
@@ -26,7 +28,8 @@ public class HtmlTableUtil {
             HtmlParser htmlParser = new HtmlParserImpl();
             htmlParser.loadHtml(imageHtml);
             ImageRenderer imageRenderer = new ImageRendererImpl(htmlParser);
-            path = "C:\\Users\\zhangyang\\Desktop\\temp\\test\\1.gif";
+            String fileName= "table-"+ UUID.randomUUID().toString().substring(0, 8) + ".png";
+            path = outputDir+ File.separator+fileName;
             imageRenderer.saveImage(path);
 //            Thread.sleep(2000l);
 //        } catch (InterruptedException e) {

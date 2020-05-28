@@ -22,7 +22,7 @@ public class EchartsUtil {
     private static final String ECHARTS_CONVERT_PATH = EchartsUtil.class.getClassLoader().getResource("").getPath() + "static/js/echarts-convert.js";
     private static final String SYSTEM_ENV = PropertiesUtil.readProperties().getSystemEnv();
     private static final String PHANTOMJS_PATH =PropertiesUtil.readProperties().getPhantomjsPath();
-    private static final String TEMP_DIR =PropertiesUtil.readProperties().getTempPath();
+//    private static final String TEMP_DIR =PropertiesUtil.readProperties().getTempPath();
 
     static Logger logger = LoggerFactory.getLogger(EchartsUtil.class);
 
@@ -32,7 +32,7 @@ public class EchartsUtil {
      * @param echartsType  需要生成的模版类型（待拓展）
      * @return 图片路径
      */
-    public static String generateEchartsPicture(Option option, EchartsType echartsType){
+    public static String generateEchartsPicture(Option option, EchartsType echartsType,String outputDir){
         String optionJson = null;
         if(echartsType.equals(EchartsType.HISTOGRAM)){
             optionJson = generateHistogramOption(option);
@@ -44,7 +44,7 @@ public class EchartsUtil {
             logger.error("图表生成失败，请检查相应参数");
             return null;
         }
-        return toEChartsPicture(optionJson);
+        return toEChartsPicture(optionJson,outputDir);
     }
 
     /**
@@ -56,7 +56,7 @@ public class EchartsUtil {
      * @param echartsType  需要生成的模版类型（待拓展）
      * @return 图片路径
      */
-    public static String generateEchartsPicture(String[] items,String[] colors,String[] xRanges,double[][] datas, String unit, EchartsType echartsType){
+    public static String generateEchartsPicture(String[] items,String[] colors,String[] xRanges,double[][] datas, String unit, EchartsType echartsType,String outputDir){
         String optionJson = null;
         if(echartsType.equals(EchartsType.HISTOGRAM)){
             optionJson = generateHistogramOption(items,colors,xRanges,datas,unit);
@@ -68,7 +68,7 @@ public class EchartsUtil {
             logger.error("图表生成失败，请检查相应参数");
             return null;
         }
-        return toEChartsPicture(optionJson);
+        return toEChartsPicture(optionJson, outputDir);
     }
 
     /**
@@ -263,10 +263,10 @@ public class EchartsUtil {
      * @param option
      * @return
      */
-    static String toEChartsPicture(String option) {
-        String dataPath = writeFile(option);
+    static String toEChartsPicture(String option,String outputDir) {
+        String dataPath = writeFile(option, outputDir);
         String fileName= "echarts-"+ UUID.randomUUID().toString().substring(0, 8) + ".png";
-        String path = TEMP_DIR+ File.separator +fileName;
+        String path = outputDir+ File.separator +fileName;
         try {
             File file = new File(path);     //文件路径（路径+文件名）
             if (!file.exists()) {   //文件不存在则创建文件，先创建目录
@@ -301,8 +301,8 @@ public class EchartsUtil {
      * @param options
      * @return
      */
-    public static String writeFile(String options) {
-        String dataPath= TEMP_DIR+ File.separator + UUID.randomUUID().toString().substring(0, 8) +".json";
+    public static String writeFile(String options,String outputDir) {
+        String dataPath= outputDir+ File.separator + UUID.randomUUID().toString().substring(0, 8) +".json";
         try {
             /* 写入Txt文件 */
             File writename = new File(dataPath); // 相对路径，如果没有则要建立一个新的output.txt文件

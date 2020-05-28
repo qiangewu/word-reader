@@ -15,12 +15,12 @@ public class TableGenerator {
     /**
      * 主要用能情况表
      */
-    public static String generateEnergyUsageTable(List<EnergyUsage> energyUsageList){
+    public static String generateEnergyUsageTable(List<EnergyUsage> energyUsageList,String outputDir){
         String path = null;
         if(energyUsageList!=null){
             Map<String,Object> datas = new HashMap<>();
             datas.put("energyUsagaList",energyUsageList);
-            path = HtmlTableUtil.generateTablePicture(datas);
+            path = HtmlTableUtil.generateTablePicture(datas,outputDir);
         }
         return path;
     }
