@@ -11,6 +11,8 @@ import com.ls.zy.wordreader.utils.PropertiesUtil;
 import com.ls.zy.wordreader.utils.WordFileUtil;
 import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,7 +26,7 @@ import java.util.UUID;
  * 数据转化、数据模拟等处理
  */
 public class BuildTemplateWordHandler {
-
+    static Logger logger = LoggerFactory.getLogger(BuildTemplateWordHandler.class);
     public static void generateNewWord(BuildAnalysisTemplate buildAnalysisTemplate){
         GlobalConfig globalConfig = PropertiesUtil.readProperties();
         XWPFDocument xwpfDocument = null;
@@ -33,6 +35,7 @@ public class BuildTemplateWordHandler {
             FileOutputStream fos = new FileOutputStream(globalConfig.getTemplateResultDir());
             ZipSecureFile.setMinInflateRatio(-1.0d);
             String tempOutputDir = PropertiesUtil.readProperties().getTempDir()+ File.separator+UUID.randomUUID().toString().substring(0, 8);
+            logger.info("输出文件路径:{}",tempOutputDir);
             //生成对应图片
             BuildTemplateWordHandler.generatePicture(buildAnalysisTemplate,tempOutputDir);
             //转化Word识别的Map

@@ -276,7 +276,7 @@ public class EchartsUtil {
         String dataPath = writeFile(option, outputDir);
         String fileName= "echarts-"+ UUID.randomUUID().toString().substring(0, 8) + ".png";
         String path = outputDir+ File.separator +fileName;
-        logger.info("Will build cChartsPicture ：{}", path);
+        logger.info("Will build cChartsPicture: {}", path);
         try {
             File file = new File(path);     //文件路径（路径+文件名）
             if (!file.exists()) {   //文件不存在则创建文件，先创建目录
