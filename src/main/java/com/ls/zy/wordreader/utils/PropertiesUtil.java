@@ -25,10 +25,6 @@ public class PropertiesUtil {
                     globalConfig.setTemplateDir(p.get(key).toString());
                     continue;
                 }
-                if(key.toString().equals("templateResultDir")) {
-                    globalConfig.setTemplateResultDir(p.get(key).toString());
-                    continue;
-                }
                 if(key.toString().equals("systemEnv")) {
                     globalConfig.setSystemEnv(p.get(key).toString());
                     continue;

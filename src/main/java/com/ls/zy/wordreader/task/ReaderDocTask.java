@@ -7,6 +7,7 @@ import com.ls.zy.wordreader.handlers.BuildTemplateWordHandler;
 import com.ls.zy.wordreader.handlers.SimulateDateHandler;
 import com.ls.zy.wordreader.service.EchartService;
 import com.ls.zy.wordreader.service.FileMongodbService;
+import com.ls.zy.wordreader.service.WordReaderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,19 +34,22 @@ public class ReaderDocTask {
     @Autowired
     EchartService echartService;
 
+    @Autowired
+    WordReaderService wordReaderService;
+
     /**
      * 楼宇潜力客户用能初步分析报告模板
      */
-    @PostConstruct
+//    @PostConstruct
 //    @Scheduled(cron = "0 0/2 * * * ?")
     public void readerExcel(){
 
         //模拟数据，实际场景需要替换此处
-//        BuildAnalysisTemplate buildAnalysisTemplate = SimulateDateHandler.inintBuildAnalysisTemplate();
-//        BuildTemplateWordHandler.generateNewWord(buildAnalysisTemplate);
+        BuildAnalysisTemplate buildAnalysisTemplate = SimulateDateHandler.inintBuildAnalysisTemplate();
+        System.out.println(wordReaderService.generateNewWord(buildAnalysisTemplate,"C:\\Users\\zhangyang\\Desktop\\temp"));
 
-        Option powerFactorTrendOption = SimulateDateHandler.initPowerFactorTrendOption();
-        System.out.println(echartService.generatePowerFactorTrend(powerFactorTrendOption,"C:\\Users\\zhangyang\\Desktop\\temp"));
+//        Option powerFactorTrendOption = SimulateDateHandler.initPowerFactorTrendOption();
+//        System.out.println(echartService.generatePowerFactorTrend(powerFactorTrendOption,"C:\\Users\\zhangyang\\Desktop\\temp"));
 
     }
 

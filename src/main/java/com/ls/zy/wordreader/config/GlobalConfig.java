@@ -23,12 +23,6 @@ public class GlobalConfig {
     String templateDir;
 
     /**
-     * 模板填充输出路径
-     */
-    @Value("${templateResultDir}")
-    String templateResultDir;
-
-    /**
      * 系统环境
      */
     @Value("${systemEnv}")

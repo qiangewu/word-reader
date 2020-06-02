@@ -52,9 +52,4 @@ public class EchartController {
         return echartService.generatePowerFactorTrend(powerFactorTrendOption,globalConfig.getTempDir());
     }
 
-    @RequestMapping(value = "/downloadFile",method = RequestMethod.GET)
-    public void downloadFile(String fileKey, HttpServletResponse response,HttpServletRequest httpServletRequest) throws Exception {
-        fileMongodbService.downloadFile(fileKey,response);
-    }
-
 }
