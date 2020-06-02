@@ -9,7 +9,6 @@ import com.ls.zy.wordreader.utils.EchartsUtil;
 import com.ls.zy.wordreader.utils.FileUtil;
 import com.ls.zy.wordreader.utils.PropertiesUtil;
 import com.ls.zy.wordreader.utils.WordFileUtil;
-import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +32,6 @@ public class BuildTemplateWordHandler {
         try {
             FileInputStream fis = new FileInputStream(globalConfig.getTemplateDir());
             FileOutputStream fos = new FileOutputStream(globalConfig.getTemplateResultDir());
-            ZipSecureFile.setMinInflateRatio(-1.0d);
             String tempOutputDir = PropertiesUtil.readProperties().getTempDir()+ File.separator+UUID.randomUUID().toString().substring(0, 8);
             logger.info("输出文件路径:{}",tempOutputDir);
             //生成对应图片

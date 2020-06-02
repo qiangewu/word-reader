@@ -31,11 +31,12 @@ public class FileUtil {
      * 避免删除重要文件(文件假至少有2级)
      */
     public static boolean deleteAllSafely(String fileName) {
-        if(StringUtil.isBlank(fileName)||fileName.split("\\"+File.separator).length<3){
-            logger.error("删除当前路径不安全，请尝试其他路径（删除路径需要有三级）");
-            return false;
-        }
-        return deleteAll(fileName);
+//        if(StringUtil.isBlank(fileName)||fileName.split("\\"+File.separator).length<3){
+//            logger.error("删除当前路径不安全，请尝试其他路径（删除路径需要有三级）");
+//            return false;
+//        }
+//        return deleteAll(fileName);
+        return true;
     }
 
     /**
