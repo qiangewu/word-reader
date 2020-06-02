@@ -9,3 +9,6 @@ server:
 #    encoding: UTF-8
 #    cache: false
 
+spring:
+  application:
+    name: word-reader
