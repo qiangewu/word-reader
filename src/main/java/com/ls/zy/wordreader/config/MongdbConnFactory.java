@@ -4,7 +4,6 @@ import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
-import com.sgies.operation.base.independ.cache.PropertiesCache;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;

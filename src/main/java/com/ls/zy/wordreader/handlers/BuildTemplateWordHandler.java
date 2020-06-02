@@ -25,14 +25,23 @@ import java.util.UUID;
  * 数据转化、数据模拟等处理
  */
 public class BuildTemplateWordHandler {
+
     static Logger logger = LoggerFactory.getLogger(BuildTemplateWordHandler.class);
-    public static void generateNewWord(BuildAnalysisTemplate buildAnalysisTemplate){
+
+    /**
+     * 返回生成words路径
+     * @param buildAnalysisTemplate
+     * @param outputDir
+     * @return
+     */
+    public static String generateNewWord(BuildAnalysisTemplate buildAnalysisTemplate,String outputDir){
         GlobalConfig globalConfig = PropertiesUtil.readProperties();
         XWPFDocument xwpfDocument = null;
         try {
             FileInputStream fis = new FileInputStream(globalConfig.getTemplateDir());
-            FileOutputStream fos = new FileOutputStream(globalConfig.getTemplateResultDir());
-            String tempOutputDir = PropertiesUtil.readProperties().getTempDir()+ File.separator+UUID.randomUUID().toString().substring(0, 8);
+            String filePath = outputDir+File.separator+UUID.randomUUID().toString().substring(0, 8)+".docx";
+            FileOutputStream fos = new FileOutputStream(filePath);
+            String tempOutputDir = outputDir+ File.separator+UUID.randomUUID().toString().substring(0, 8);
             logger.info("输出文件路径:{}",tempOutputDir);
             //生成对应图片
             BuildTemplateWordHandler.generatePicture(buildAnalysisTemplate,tempOutputDir);
@@ -43,9 +52,11 @@ public class BuildTemplateWordHandler {
             fos.close();
             //清空临时文件
             FileUtil.deleteAllSafely(tempOutputDir);
+            return filePath;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         }
+        return null;
     }
 
     /**
